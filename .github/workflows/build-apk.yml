@@ -40,6 +40,9 @@ jobs:
           rm -f pnpm-lock.yaml
           pnpm install
 
+      - name: Fix async-storage version
+        run: pnpm add @react-native-async-storage/async-storage@1.x
+
       - name: Prebuild Expo project
         run: npx expo prebuild --clean
 
