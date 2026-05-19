@@ -35,10 +35,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Create .npmrc to disable checks
+        run: |
+          echo "checks.minimum-release-age=0" >> .npmrc
+          echo "audit=false" >> .npmrc
+
       - name: Install dependencies with pnpm
-        run: pnpm install --no-frozen-lockfile
-        env:
-          PNPM_CHECKS_MINIMUM_RELEASE_AGE: 0
+        run: pnpm install --config.checks.minimum-release-age=0 --config.audit=false
 
       - name: Prebuild Expo project
         run: npx expo prebuild --clean
