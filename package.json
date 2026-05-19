@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^3.0.3",
+    "expo-dev-client": "^55.0.34",
+    "expo": "~55.0.24",
+    "react": "19.2.0",
+    "react-native": "0.83.6"
+  },
+  "name": "paiju-web-latest-20260519",
+  "version": "1.0.0",
+  "scripts": {}
+}
