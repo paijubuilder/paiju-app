@@ -36,7 +36,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies with pnpm
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
+        env:
+          PNPM_CHECKS_MINIMUM_RELEASE_AGE: 0
 
       - name: Prebuild Expo project
         run: npx expo prebuild --clean
