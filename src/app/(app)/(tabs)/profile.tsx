@@ -14,7 +14,7 @@ import {
   getNightModeOption, setNightModeOption, getSoundEffectOption, setSoundEffectOption,
   isMemberActive, getMemberExpireTime, formatDateTime, getStreakDays,
   isAgentLoggedIn, isAdminLoggedIn, verifyAdminActivationCode,
-  isDeviceActivated, markDeviceActivated,
+  isDeviceActivated, markDeviceActivated, markAdminEntryRevealed,
   getConfig, getPendingUserOrders, isAdminSessionValidated,
   type NightModeOption,
 } from '@/lib/appStore';
@@ -342,6 +342,7 @@ export default function ProfileTab() {
     const timer3 = setTimeout(() => {
       if (versionTapCount.current === 3) {
         versionTapCount.current = 0;
+        markAdminEntryRevealed(); // 保存管理员入口已发现状态
         router.push('/(app)/admin-rbac-login' as never);
       }
     }, 500);
@@ -506,6 +507,13 @@ export default function ProfileTab() {
             {/* 代理入口：始终显示，未开通→介绍页，已开通→中心 */}
             <MenuItem emoji="🏆" label={agentIn ? '代理中心' : '加入代理计划'} onPress={() => router.push(agentIn ? '/(app)/agent-center' : '/(app)/agent-intro' as never)} />
             <Divider />
+            {/* 管理员后台入口：登录后显示 */}
+            {adminIn && (
+              <>
+                <MenuItem emoji="⚙️" label="管理员后台" onPress={() => router.push('/(app)/admin-portal' as never)} />
+                <Divider />
+              </>
+            )}
             <MenuItem emoji="💎" label="会员开通" onPress={() => router.push('/(app)/activation')} />
             <Divider />
             <MenuItem emoji="🛡️" label="护航工具箱" onPress={() => router.push('/(app)/toolbox' as never)} />
