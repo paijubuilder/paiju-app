@@ -4,17 +4,9 @@
     "slug": "paiju-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "android": {
-      "package": "com.tong958262.paijuweblatest20260519",
-      "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.tong958262.paijuweblatest20260519"
     }
   }
 }
