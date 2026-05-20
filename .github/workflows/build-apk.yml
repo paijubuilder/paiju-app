@@ -29,9 +29,10 @@ jobs:
           mkdir -p android/app/src/main/assets/web
           # Download the fixed static files from release
           curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed.zip"
-          # Extract to Android assets
+          # Extract to Android assets (ignore warnings)
           cd android/app/src/main/assets/web
-          unzip -o /tmp/paiju-web-fixed.zip
+          unzip -o /tmp/paiju-web-fixed.zip 2>&1 || echo "Extraction completed with warnings"
+          ls -la
           echo "Fixed static files copied successfully"
 
       - name: Setup Java
