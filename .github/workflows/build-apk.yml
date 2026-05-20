@@ -28,7 +28,7 @@ jobs:
           # Create web directory in Android assets if it doesn't exist
           mkdir -p android/app/src/main/assets/web
           # Download the fixed static files from release (v2 with loading screen)
-          curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed-v2.zip"
+          curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed-v3.zip"
           # Extract to Android assets
           cd android/app/src/main/assets/web
           unzip -o /tmp/paiju-web-fixed.zip 2>&1 || echo "Extraction completed"
