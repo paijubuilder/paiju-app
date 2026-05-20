@@ -15,8 +15,9 @@ import NetInfo from '@react-native-community/netinfo';
 import AIChatModal from './components/AIChatModal';
 
 // ==================== 配置区域 ====================
-// 请替换为您实际部署的Vercel URL
-const REMOTE_URL = 'https://your-paiju-spa.vercel.app';
+// 【重要】请替换为您实际部署的Vercel URL
+// 例如: 'https://paiju-web.vercel.app'
+const REMOTE_URL = 'https://your-vercel-url.vercel.app';
 const LOCAL_URL = 'file:///android_asset/web/index.html';
 const VERSION_KEY = 'web_version';
 const LOAD_TIMEOUT = 5000; // 5秒超时
@@ -141,7 +142,7 @@ const App = () => {
       setRemoteAvailable(false);
       setWebViewUrl(LOCAL_URL);
       setIsLoading(false);
-      ToastAndroid.show('网络响应慢，已切换到离线模式', ToastAndroid.LONG);
+      ToastAndroid.show('当前使用离线版本', ToastAndroid.LONG);
     } else {
       setIsLoading(false);
       setLoadError(true);
@@ -181,7 +182,7 @@ const App = () => {
       setIsRemoteMode(false);
       setRemoteAvailable(false);
       setWebViewUrl(LOCAL_URL);
-      ToastAndroid.show('网络连接失败，已切换到离线模式', ToastAndroid.LONG);
+      ToastAndroid.show('当前使用离线版本', ToastAndroid.LONG);
     } else {
       setLoadError(true);
       ToastAndroid.show('页面加载失败，请重启应用', ToastAndroid.LONG);
@@ -198,7 +199,7 @@ const App = () => {
       setIsRemoteMode(false);
       setRemoteAvailable(false);
       setWebViewUrl(LOCAL_URL);
-      ToastAndroid.show('服务器错误，已切换到离线模式', ToastAndroid.LONG);
+      ToastAndroid.show('当前使用离线版本', ToastAndroid.LONG);
     }
   };
 
@@ -208,10 +209,19 @@ const App = () => {
     // 允许file://协议（本地资源）
     if (url.startsWith('file://')) return true;
     
-    // 允许http/https协议
-    if (url.startsWith('http://') || url.startsWith('https://')) return true;
+    // 允许http/https协议（远程URL及其子页面）
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      // 如果是远程模式，只允许REMOTE_URL域内的链接
+      if (isRemoteMode && !url.startsWith(REMOTE_URL)) {
+        // 外部链接，可以选择阻止或在系统浏览器中打开
+        console.log('[App] 检测到外部链接:', url);
+        return false; // 阻止外部链接
+      }
+      return true;
+    }
     
-    // 阻止其他协议
+    // 阻止其他协议（tel:, mailto:等）
+    console.log('[App] 阻止不支持的协议:', url);
     return false;
   };
 
