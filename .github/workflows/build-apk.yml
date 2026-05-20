@@ -39,6 +39,13 @@ jobs:
           echo "SENTRY_DISABLE_NATIVE_DEBUG_UPLOAD=true" >> $GITHUB_ENV
           echo "EXPO_PUBLIC_SENTRY_DSN=" >> $GITHUB_ENV
 
+      - name: Update compileSdk to 36
+        run: |
+          # Update compileSdkVersion in build.gradle to fix dependency requirements
+          sed -i 's/compileSdk = 35/compileSdk = 36/g' android/build.gradle
+          # Also update in gradle.properties if present
+          sed -i 's/compileSdkVersion=35/compileSdkVersion=36/g' android/gradle.properties || true
+
       - name: Build Android APK
         run: |
           cd android
