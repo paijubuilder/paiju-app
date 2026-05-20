@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AndroidManifest_additions.xml — 原生功能权限与组件补充声明
+  ──────────────────────────────────────────────────────────────
+  使用方法：
+  将本文件内容合并到原生项目的 android/app/src/main/AndroidManifest.xml
+
+  ① <uses-permission> 标签合并到 <manifest> 根元素内
+  ② <service> / <receiver> / <activity> 标签合并到 <application> 元素内
+
+  注意：
+  - 仅声明对应功能开关为 true 时真正需要的权限
+  - android:enabled="false" 为演示注释，真实使用时删除该属性或改为 true
+  ──────────────────────────────────────────────────────────────
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ═══════════════════════════════════════════════════
+         权限声明（合并到 <manifest> 根元素内）
+         ═══════════════════════════════════════════════════ -->
+
+    <!-- 悬浮窗：SYSTEM_ALERT_WINDOW（enable_floating_window）-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- 前台服务：FOREGROUND_SERVICE（enable_foreground_service）-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Android 14+ 需要声明具体类型 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <!-- 通知权限：Android 13+ 需要显式声明 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- 开机自启：RECEIVE_BOOT_COMPLETED（enable_boot_start）-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- 网络状态检测：VPN检测需要（enable_risk_detection）-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+    <!-- ═══════════════════════════════════════════════════
+         组件声明（合并到 <application> 元素内）
+         ═══════════════════════════════════════════════════ -->
+    <application>
+
+        <!-- ─── 悬浮窗服务 ─────────────────────────────── -->
+        <!-- 对应开关：enable_floating_window -->
+        <service
+            android:name=".native_modules.FloatingWindowService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <!-- 悬浮窗权限引导页 -->
+        <activity
+            android:name=".native_modules.OverlayPermissionActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar" />
+
+
+        <!-- ─── 无障碍服务 ─────────────────────────────── -->
+        <!-- 对应开关：enable_accessibility_detect -->
+        <service
+            android:name=".native_modules.GameDetectAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- 无障碍服务引导页 -->
+        <activity
+            android:name=".native_modules.AccessibilityGuideActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar" />
+
+
+        <!-- ─── 前台服务 ──────────────────────────────── -->
+        <!-- 对应开关：enable_foreground_service -->
+        <service
+            android:name=".native_modules.ForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+
+        <!-- ─── 开机自启 ──────────────────────────────── -->
+        <!-- 对应开关：enable_boot_start -->
+        <receiver
+            android:name=".native_modules.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="500">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
+
+<!--
+═══════════════════════════════════════════════════════════════
+Application.onCreate 中的初始化代码示例（供参考）：
+
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        // 异步同步远程开关状态
+        SettingsRepository.syncFromRemote(this)
+
+        // 读取开关并启动对应服务
+        if (SettingsRepository.isEnabled(this, "enable_foreground_service")) {
+            val intent = Intent(this, ForegroundService::class.java)
+                .setAction(ForegroundService.ACTION_START)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
+        }
+
+        if (SettingsRepository.isEnabled(this, "enable_floating_window")) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+                Settings.canDrawOverlays(this)) {
+                startService(Intent(this, FloatingWindowService::class.java)
+                    .setAction(FloatingWindowService.ACTION_SHOW))
+            }
+        }
+    }
+}
+═══════════════════════════════════════════════════════════════
+-->

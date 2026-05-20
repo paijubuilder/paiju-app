@@ -1,0 +1,150 @@
+{
+  "_comment": "各品牌手机悬浮窗权限设置路径配置。由 PermissionHelper.kt 读取，自动选择最佳跳转 Intent。",
+  "_version": "1.0.0",
+  "_updated": "2026-05-14",
+  "brands": [
+    {
+      "id": "xiaomi",
+      "name": "小米 / Redmi",
+      "packages": ["com.miui.securitycenter", "com.xiaomi.mipush.sdk"],
+      "manufacturer_keyword": "Xiaomi",
+      "intent": {
+        "action": "miui.intent.action.APP_PERM_EDITOR",
+        "package": "com.miui.securitycenter",
+        "extra_string": {
+          "extra_pkgname": "{APP_PACKAGE}"
+        }
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "设置 → 应用设置 → 应用管理 → 牌局环境守护",
+        "权限 → 悬浮窗 → 始终允许"
+      ],
+      "quick_path": "设置 → 授权与隐私 → 悬浮窗",
+      "os_name": "MIUI / HyperOS"
+    },
+    {
+      "id": "huawei",
+      "name": "华为 / 鸿蒙",
+      "packages": ["com.huawei.systemmanager"],
+      "manufacturer_keyword": "HUAWEI",
+      "intent": {
+        "action": "com.huawei.systemmanager.action.SYSTEM_MANAGER",
+        "package": "com.huawei.systemmanager"
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "设置 → 应用 → 应用管理 → 牌局环境守护",
+        "权限 → 其他权限 → 悬浮窗 → 开启"
+      ],
+      "quick_path": "设置 → 隐私 → 权限管理 → 应用权限（鸿蒙OS）",
+      "os_name": "EMUI / HarmonyOS"
+    },
+    {
+      "id": "oppo",
+      "name": "OPPO / 一加",
+      "packages": ["com.coloros.safecenter", "com.oppo.safe"],
+      "manufacturer_keyword": "OPPO",
+      "intent": {
+        "action": "com.coloros.safecenter.permission.floatwindow.FloatWindowListActivity",
+        "package": "com.coloros.safecenter"
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "设置 → 应用管理 → 牌局环境守护",
+        "权限 → 显示悬浮窗 → 允许"
+      ],
+      "quick_path": "设置 → 特殊功能 → 悬浮窗权限管理",
+      "os_name": "ColorOS"
+    },
+    {
+      "id": "vivo",
+      "name": "vivo / iQOO",
+      "packages": ["com.iqoo.secure", "com.vivo.permissionmanager"],
+      "manufacturer_keyword": "vivo",
+      "intent": {
+        "action": "com.iqoo.secure.safeguard.FloatWindowManager",
+        "package": "com.iqoo.secure"
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "i管家 → 应用管理 → 牌局环境守护",
+        "权限管理 → 悬浮窗 → 始终允许"
+      ],
+      "quick_path": "设置 → 更多设置 → 悬浮窗管理",
+      "os_name": "OriginOS / FuntouchOS"
+    },
+    {
+      "id": "honor",
+      "name": "荣耀",
+      "packages": ["com.huawei.systemmanager", "com.hihonor.systemmanager"],
+      "manufacturer_keyword": "HONOR",
+      "intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "设置 → 应用 → 应用管理 → 牌局环境守护",
+        "权限管理 → 悬浮窗 → 开启"
+      ],
+      "quick_path": "设置 → 隐私 → 权限管理 → 应用权限",
+      "os_name": "MagicUI"
+    },
+    {
+      "id": "samsung",
+      "name": "三星",
+      "packages": ["com.samsung.android.sm"],
+      "manufacturer_keyword": "samsung",
+      "intent": {
+        "action": "android.settings.action.MANAGE_OVERLAY_PERMISSION",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "设置 → 应用 → 牌局环境守护",
+        "权限 → 出现在其他应用上方 → 允许"
+      ],
+      "quick_path": "标准 Android Settings，一步直达",
+      "os_name": "One UI"
+    },
+    {
+      "id": "default",
+      "name": "其他品牌（通用）",
+      "packages": [],
+      "manufacturer_keyword": "",
+      "intent": {
+        "action": "android.settings.action.MANAGE_OVERLAY_PERMISSION",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "fallback_intent": {
+        "action": "android.settings.APPLICATION_DETAILS_SETTINGS",
+        "data": "package:{APP_PACKAGE}"
+      },
+      "steps": [
+        "打开系统「设置」，搜索「悬浮窗」",
+        "找到本应用并开启权限"
+      ],
+      "quick_path": "设置 → 特殊应用权限 → 出现在其他应用上方",
+      "os_name": "Android 原生"
+    }
+  ]
+}

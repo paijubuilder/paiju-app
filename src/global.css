@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 暖金色调 — 麻将桌木质感 */
+    --background: 20 15% 8%;
+    --foreground: 43 80% 80%;
+    --card: 20 20% 11%;
+    --card-foreground: 43 80% 80%;
+    --popover: 20 20% 11%;
+    --popover-foreground: 43 80% 80%;
+    --primary: 43 75% 52%;
+    --primary-foreground: 20 15% 8%;
+    --secondary: 20 18% 15%;
+    --secondary-foreground: 43 60% 65%;
+    --muted: 20 15% 13%;
+    --muted-foreground: 30 20% 45%;
+    --accent: 35 90% 55%;
+    --accent-foreground: 20 15% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 25% 20%;
+    --input: 20 20% 13%;
+    --ring: 43 75% 52%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 20 15% 8%;
+    --foreground: 43 80% 80%;
+    --card: 20 20% 11%;
+    --card-foreground: 43 80% 80%;
+    --popover: 20 20% 11%;
+    --popover-foreground: 43 80% 80%;
+    --primary: 43 75% 52%;
+    --primary-foreground: 20 15% 8%;
+    --secondary: 20 18% 15%;
+    --secondary-foreground: 43 60% 65%;
+    --muted: 20 15% 13%;
+    --muted-foreground: 30 20% 45%;
+    --accent: 35 90% 55%;
+    --accent-foreground: 20 15% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 25% 20%;
+    --input: 20 20% 13%;
+    --ring: 43 75% 52%;
+  }
+}

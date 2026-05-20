@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  floating_layout.xml — 悬浮窗 View 布局文件
+  ──────────────────────────────────────────────────────────────
+  对应服务：FloatingWindowService.kt
+  存放路径（原生项目中）：app/src/main/res/layout/floating_layout.xml
+
+  结构：
+  - 外层 FrameLayout：悬浮窗容器（56dp × 56dp，圆形裁剪）
+  - 护盾图标 ImageView：可点击，触发展开菜单
+  - 状态角标 TextView（可选）：显示检测中/护航中等状态
+  ──────────────────────────────────────────────────────────────
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/floating_container"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:background="@drawable/bg_floating_circle"
+    android:elevation="8dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- 护盾主图标（TODO：替换为项目实际 drawable 资源）-->
+    <ImageView
+        android:id="@+id/iv_shield_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:contentDescription="牌局守护"
+        android:src="@android:drawable/ic_lock_lock"
+        android:tint="#FFFFFF" />
+
+    <!--
+    状态角标（可选）：显示「检」「护」「等」等单字状态
+    TODO：在 FloatingWindowService.updateFloatingWindowStatus() 中更新此 TextView
+    -->
+    <TextView
+        android:id="@+id/tv_status_badge"
+        android:tag="badge"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@android:color/holo_green_dark"
+        android:gravity="center"
+        android:text="●"
+        android:textColor="#FFFFFF"
+        android:textSize="8sp"
+        android:visibility="gone" />
+        <!-- 默认隐藏，检测运行时通过代码控制可见性 -->
+
+</FrameLayout>
+
+<!--
+使用说明：
+1. 创建 res/drawable/bg_floating_circle.xml，内容参考：
+   <shape xmlns:android="..." android:shape="oval">
+       <solid android:color="#CC0D1520" />
+       <stroke android:width="1.5dp" android:color="#D4AF37" />
+   </shape>
+
+2. 在 FloatingWindowService.buildFloatingView() 中替换 buildFloatingView 为：
+   val view = LayoutInflater.from(this).inflate(R.layout.floating_layout, null)
+
+3. 通过 view.findViewById<TextView>(R.id.tv_status_badge) 更新状态角标
+-->
