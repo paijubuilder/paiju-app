@@ -23,6 +23,17 @@ jobs:
       - name: Generate native code
         run: npx expo prebuild --clean
 
+      - name: Copy fixed static web files to Android assets
+        run: |
+          # Create web directory in Android assets if it doesn't exist
+          mkdir -p android/app/src/main/assets/web
+          # Download the fixed static files from release
+          curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed.zip"
+          # Extract to Android assets
+          cd android/app/src/main/assets/web
+          unzip -o /tmp/paiju-web-fixed.zip
+          echo "Fixed static files copied successfully"
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
