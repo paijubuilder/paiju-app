@@ -32,6 +32,8 @@ jobs:
           # Extract to Android assets
           cd android/app/src/main/assets/web
           unzip -o /tmp/paiju-web-fixed.zip 2>&1 || echo "Extraction completed"
+          # Remove problematic node_modules directory that causes AccessDeniedException
+          rm -rf node_modules || true
           ls -la
           echo "Fixed static files with loading screen copied successfully"
 
