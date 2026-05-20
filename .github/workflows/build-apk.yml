@@ -20,6 +20,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install esbuild for web export
+        run: npm install --save-dev esbuild
+
       - name: Export static web files
         run: npx expo export --platform web
 
