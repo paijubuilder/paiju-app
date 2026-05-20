@@ -33,16 +33,19 @@ jobs:
         run: |
           # Remove sentry.properties to disable Sentry CLI
           rm -f android/sentry.properties
-          # Set env var to skip Sentry upload
+          # Set env vars to completely disable Sentry
           echo "SENTRY_CLI_ENABLED=false" >> $GITHUB_ENV
+          echo "SENTRY_DISABLE_AUTO_UPLOAD=true" >> $GITHUB_ENV
+          echo "SENTRY_DISABLE_NATIVE_DEBUG_UPLOAD=true" >> $GITHUB_ENV
           echo "EXPO_PUBLIC_SENTRY_DSN=" >> $GITHUB_ENV
 
       - name: Build Android APK
         run: |
           cd android
           chmod +x gradlew
-          export SENTRY_CLI_ENABLED=false
-          ./gradlew assembleRelease -PsentryCli.enabled=false --no-daemon
+          export SENTRY_DISABLE_AUTO_UPLOAD=true
+          export SENTRY_DISABLE_NATIVE_DEBUG_UPLOAD=true
+          ./gradlew assembleRelease --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
