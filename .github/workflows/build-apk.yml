@@ -20,22 +20,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Export static web files
+        run: npx expo export --platform web
+
+      - name: Copy static web files to Android assets
+        run: |
+          # Create web directory in Android assets
+          mkdir -p android/app/src/main/assets/web
+          # Copy exported web files (exclude node_modules if any)
+          cp -r dist/* android/app/src/main/assets/web/ || true
+          rm -rf android/app/src/main/assets/web/node_modules || true
+          ls -la android/app/src/main/assets/web/
+          echo "Static web files copied successfully"
+
       - name: Generate native code
         run: npx expo prebuild --clean
-
-      - name: Copy fixed static web files to Android assets
-        run: |
-          # Create web directory in Android assets if it doesn't exist
-          mkdir -p android/app/src/main/assets/web
-          # Download the fixed static files from release (v2 with loading screen)
-          curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed-v3.zip"
-          # Extract to Android assets
-          cd android/app/src/main/assets/web
-          unzip -o /tmp/paiju-web-fixed.zip 2>&1 || echo "Extraction completed"
-          # Remove problematic node_modules directory that causes AccessDeniedException
-          rm -rf node_modules || true
-          ls -la
-          echo "Fixed static files with loading screen copied successfully"
 
       - name: Setup Java
         uses: actions/setup-java@v4
