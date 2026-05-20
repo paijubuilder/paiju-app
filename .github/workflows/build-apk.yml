@@ -29,11 +29,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Disable Sentry in CI
+        run: |
+          # Remove sentry.properties to disable Sentry CLI
+          rm -f android/sentry.properties
+          # Set env var to skip Sentry upload
+          echo "SENTRY_CLI_ENABLED=false" >> $GITHUB_ENV
+          echo "EXPO_PUBLIC_SENTRY_DSN=" >> $GITHUB_ENV
+
       - name: Build Android APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleRelease
+          export SENTRY_CLI_ENABLED=false
+          ./gradlew assembleRelease -PsentryCli.enabled=false --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
