@@ -27,13 +27,13 @@ jobs:
         run: |
           # Create web directory in Android assets if it doesn't exist
           mkdir -p android/app/src/main/assets/web
-          # Download the fixed static files from release
-          curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed.zip"
-          # Extract to Android assets (ignore warnings)
+          # Download the fixed static files from release (v2 with loading screen)
+          curl -L -o /tmp/paiju-web-fixed.zip "https://github.com/paijubuilder/paiju-app/releases/download/v1.0.127/paiju-web-fixed-v2.zip"
+          # Extract to Android assets
           cd android/app/src/main/assets/web
-          unzip -o /tmp/paiju-web-fixed.zip 2>&1 || echo "Extraction completed with warnings"
+          unzip -o /tmp/paiju-web-fixed.zip 2>&1 || echo "Extraction completed"
           ls -la
-          echo "Fixed static files copied successfully"
+          echo "Fixed static files with loading screen copied successfully"
 
       - name: Setup Java
         uses: actions/setup-java@v4
