@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build WebView APK
 
 on:
   workflow_dispatch:
@@ -15,63 +15,56 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 20
+          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install esbuild for web export
-        run: npm install --save-dev esbuild
-
-      - name: Export static web files
-        run: npx expo export --platform web
-
-      - name: Copy static web files to Android assets
+      - name: Create Expo project
         run: |
-          # Create web directory in Android assets
-          mkdir -p android/app/src/main/assets/web
-          # Copy exported web files (exclude node_modules if any)
-          cp -r dist/* android/app/src/main/assets/web/ || true
-          rm -rf android/app/src/main/assets/web/node_modules || true
-          ls -la android/app/src/main/assets/web/
-          echo "Static web files copied successfully"
+          npx create-expo-app WebViewApp --template blank
+          cd WebViewApp
+          npm install react-native-webview
 
-      - name: Generate native code
-        run: npx expo prebuild --clean
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Disable Sentry in CI
+      - name: Replace App.js with WebView
         run: |
-          # Remove sentry.properties to disable Sentry CLI
-          rm -f android/sentry.properties
-          # Set env vars to completely disable Sentry
-          echo "SENTRY_CLI_ENABLED=false" >> $GITHUB_ENV
-          echo "SENTRY_DISABLE_AUTO_UPLOAD=true" >> $GITHUB_ENV
-          echo "SENTRY_DISABLE_NATIVE_DEBUG_UPLOAD=true" >> $GITHUB_ENV
-          echo "EXPO_PUBLIC_SENTRY_DSN=" >> $GITHUB_ENV
+          cd WebViewApp
+          cat > App.js << 'EOF'
+          import React from 'react';
+          import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+          import { WebView } from 'react-native-webview';
 
-      - name: Update compileSdk to 36
-        run: |
-          # Update compileSdkVersion in build.gradle to fix dependency requirements
-          sed -i 's/compileSdk = 35/compileSdk = 36/g' android/build.gradle
-          # Also update in gradle.properties if present
-          sed -i 's/compileSdkVersion=35/compileSdkVersion=36/g' android/gradle.properties || true
+          export default function App() {
+            return (
+              <SafeAreaView style={styles.container}>
+                <StatusBar barStyle="dark-content" />
+                <WebView
+                  source={{ uri: 'https://app-bjaapbe7wkqp.appmiaoda.com' }}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  cacheEnabled={true}
+                  cacheMode="LOAD_CACHE_ELSE_NETWORK"
+                  startInLoadingState={true}
+                  allowsBackForwardNavigationGestures={true}
+                  style={styles.webview}
+                />
+              </SafeAreaView>
+            );
+          }
 
-      - name: Build Android APK
+          const styles = StyleSheet.create({
+            container: { flex: 1 },
+            webview: { flex: 1 },
+          });
+          EOF
+
+      - name: Prebuild and build APK
         run: |
+          cd WebViewApp
+          npx expo prebuild --clean
           cd android
-          chmod +x gradlew
-          export SENTRY_DISABLE_AUTO_UPLOAD=true
-          export SENTRY_DISABLE_NATIVE_DEBUG_UPLOAD=true
-          ./gradlew assembleRelease --no-daemon
+          ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: android/app/build/outputs/apk/release/*.apk
+          path: WebViewApp/android/app/build/outputs/apk/release/*.apk
