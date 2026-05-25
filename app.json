@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.paiju.webview"
@@ -20,12 +19,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "ed4ace91-c487-46c1-a715-1dd4d26b80be"
-      }
-    },
-    "owner": "tong958262"
+    }
   }
 }
