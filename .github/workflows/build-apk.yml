@@ -32,7 +32,7 @@ jobs:
           yes | sdkmanager --licenses || true
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Prebuild Android project
         run: npx expo prebuild --platform android --clean
