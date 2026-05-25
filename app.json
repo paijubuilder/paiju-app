@@ -1,105 +1,35 @@
 {
   "expo": {
-    "name": "牌局环境检测应用",
-    "slug": "paiju-env-guard",
-    "version": "1.0.127",
+    "name": "牌局环境守护",
+    "slug": "paiju-webview",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1",
-      "bundleIdentifier": "com.miaoda.appbjaapbe7wkqp"
+      "bundleIdentifier": "com.paiju.webview"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "predictiveBackGestureEnabled": false,
-      "versionCode": 1,
-      "package": "com.miaoda.appbjaapbe7wkqp",
+      "package": "com.paiju.webview",
       "permissions": [
-        "android.permission.RECORD_AUDIO",
-        "android.permission.CAMERA",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
-        "android.permission.READ_MEDIA_IMAGES",
-        "android.permission.READ_MEDIA_VIDEO",
-        "android.permission.READ_MEDIA_AUDIO",
-        "android.permission.INTERNET"
-      ]
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
     },
     "web": {
-      "bundler": "metro",
-      "favicon": "./assets/favicon.png",
-      "name": "牌局环境守护",
-      "shortName": "牌局环境守护",
-      "description": "手机环境健康度检测工具",
-      "themeColor": "#0D1929",
-      "backgroundColor": "#0D0F12",
-      "lang": "zh-CN"
-    },
-    "plugins": [
-      "expo-router",
-      "expo-asset",
-      "expo-sqlite",
-      "expo-font",
-      "expo-system-ui",
-      "expo-image",
-      [
-        "@sentry/react-native/expo",
-        {
-          "url": "https://sentry.io/",
-          "project": "paiju-env-guard",
-          "organization": "miaoda"
-        }
-      ],
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "允许牌局环境守护访问相册以上传反馈截图"
-        }
-      ],
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "允许牌局环境守护使用摄像头进行人脸识别验证"
-        }
-      ],
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "允许牌局环境守护访问相册以保存推广海报",
-          "savePhotosPermission": "允许牌局环境守护保存推广海报到相册"
-        }
-      ],
-      "expo-file-system",
-      "expo-video",
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdkVersion": 35,
-            "targetSdkVersion": 34,
-            "minSdkVersion": 24,
-            "buildToolsVersion": "34.0.0",
-            "ndkVersion": "27.1.12297006"
-          }
-        }
-      ]
-    ],
-    "router": {
-      "root": "src"
-    },
-    "experiments": {
-      "typedRoutes": true
+      "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "router": {},
       "eas": {
-        "projectId": "5fb366bc-72c9-4531-b59e-2cf2642b71c2"
+        "projectId": "ed4ace91-c487-46c1-a715-1dd4d26b80be"
       }
     },
     "owner": "tong958262"
