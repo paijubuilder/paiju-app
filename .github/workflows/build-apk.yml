@@ -18,53 +18,34 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Create Expo project
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses
         run: |
-          npx create-expo-app WebViewApp --template blank
-          cd WebViewApp
-          npm install react-native-webview
+          yes | sdkmanager --licenses || true
 
-      - name: Replace App.js with WebView
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prebuild Android project
+        run: npx expo prebuild --platform android --clean
+
+      - name: Build Release APK
         run: |
-          cd WebViewApp
-          cat > App.js << 'EOF'
-          import React from 'react';
-          import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-          import { WebView } from 'react-native-webview';
-
-          export default function App() {
-            return (
-              <SafeAreaView style={styles.container}>
-                <StatusBar barStyle="dark-content" />
-                <WebView
-                  source={{ uri: 'https://app-bjaapbe7wkqp.appmiaoda.com' }}
-                  javaScriptEnabled={true}
-                  domStorageEnabled={true}
-                  cacheEnabled={true}
-                  cacheMode="LOAD_CACHE_ELSE_NETWORK"
-                  startInLoadingState={true}
-                  allowsBackForwardNavigationGestures={true}
-                  style={styles.webview}
-                />
-              </SafeAreaView>
-            );
-          }
-
-          const styles = StyleSheet.create({
-            container: { flex: 1 },
-            webview: { flex: 1 },
-          });
-          EOF
-
-      - name: Prebuild and build APK
-        run: |
-          cd WebViewApp
-          npx expo prebuild --clean
           cd android
-          ./gradlew assembleRelease
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: WebViewApp/android/app/build/outputs/apk/release/*.apk
+          name: paiju-webview-release
+          path: android/app/build/outputs/apk/release/*.apk
+          retention-days: 30
