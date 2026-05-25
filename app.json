@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "牌局环境守护",
+    "slug": "paiju-webview",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.paiju.webview"
+    },
+    "android": {
+      "package": "com.paiju.webview",
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ed4ace91-c487-46c1-a715-1dd4d26b80be"
+      }
+    },
+    "owner": "tong958262"
+  }
+}
